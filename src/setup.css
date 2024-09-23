@@ -1,0 +1,10 @@
+.setup {
+    display: flex;
+    gap: 2em;
+}
+
+.difficultyButton {
+    width: 8em;
+    height: 3em;
+    
+}

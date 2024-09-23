@@ -1,35 +1,37 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Cards from './Cards'
+import Setup from './Setup'
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [setup, setSetup] = useState(true)
+  const [difficulty, setDifficulty] = useState(0)
+
+  function setupHTML() {
+    console.log('in setup')
+
+    
+    return (
+      <Setup setSetup={setSetup} setDifficulty={setDifficulty} ></Setup>
+    )
+  }
+
+  function gameHTML() {
+    console.log('in game')
+    console.log(setup, difficulty)
+    return(
+      <Cards></Cards>
+    )
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  <div className="main">
+    {setup ? setupHTML() : gameHTML()}
+  </div>
+)
 }
 
 export default App

@@ -7,6 +7,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
-    width: 49em;
     justify-content: center;
+    padding: 2em;
   }

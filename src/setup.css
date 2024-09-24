@@ -1,6 +1,7 @@
 .setup {
     display: flex;
-    gap: 2em;
+    flex-direction: column;
+    
 }
 
 .difficultyButton {
@@ -8,3 +9,14 @@
     height: 3em;
     
 }
+
+.buttonContainer{
+    display: flex;
+    gap: 2em;
+}
+
+.setupTitle {
+    display: flex;
+    justify-content: center;
+}
+

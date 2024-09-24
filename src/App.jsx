@@ -11,24 +11,20 @@ function App() {
   const [difficulty, setDifficulty] = useState(0)
 
   function setupHTML() {
-    console.log('in setup')
-
-    
     return (
       <Setup setSetup={setSetup} setDifficulty={setDifficulty} ></Setup>
     )
   }
 
   function gameHTML() {
-    console.log('in game')
-    console.log(setup, difficulty)
     return(
-      <Cards></Cards>
+      <Cards difficulty={difficulty}></Cards>
     )
   }
 
   return (
   <div className="main">
+    <h1 className="title">Memory Game</h1>
     {setup ? setupHTML() : gameHTML()}
   </div>
 )

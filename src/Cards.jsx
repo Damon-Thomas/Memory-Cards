@@ -3,6 +3,22 @@ import "./cards.css";
 
 function Cards({ difficulty }) {
   const [gifArray, setGifArray] = useState([]);
+  const [highScore, setHighScore] = useState(0)
+  const [gameover, setGameover] = useState(false)
+  const possibleScore = gifArray.length
+  const currentScore = () => {
+    let count = 0
+    gifArray.forEach(element => {
+      if(element.selected === true){
+        count++
+      }
+    });
+    if (count > highScore) {
+      setHighScore(count)
+    }
+    return count
+  }
+ 
 
   function getDifficulty() {
     if (difficulty === 1) {
@@ -28,6 +44,8 @@ function Cards({ difficulty }) {
   }
 
   useEffect(() => {
+    
+    setGameover(false)
     const apiResults = fetch(
       `https://api.giphy.com/v1/gifs/search?api_key=91AXJMJcXuZNmgJ7Veh8VpLBfckc1fq3&q=The+office+show&limit=${getDifficulty()}&offset=0&rating=g&lang=en&bundle=messaging_non_clips`,
       { mode: "cors" }
@@ -40,11 +58,9 @@ function Cards({ difficulty }) {
         response.data.forEach((element) => {
           array.push({ data: element, selected: false });
         });
-        console.log('copy', array);
-
         setGifArray([...array]);
       });
-  }, []);
+  }, [gameover]);
 
   function getGifById(selectedID) {
     let elementPos = gifArray
@@ -58,31 +74,39 @@ function Cards({ difficulty }) {
     return [objectFound, elementPos];
   }
 
-  const clickHandler= (e) => {
+  function checkGameOver() {
+    
+    if(currentScore() === possibleScore){
+      
+      gameOver()}
+  }
+
+  function gameOver() {
+    
+    setGameover(true)
+  }
+
+  const clickHandler = (e) => {
     const id = e.target.dataset.id
     if (id) {
-      console.log(gifArray);
       let gif = getGifById(id);
-      console.log(gif[0]);
       if (gif[0]) {
+        if (gif[0].selected) {
+          
+          gameOver()
+        }
+        else {
         gif[0].selected = true;
         let array = [...gifArray];
         array[gif[1]] = gif[0];
         setGifArray([...array]);
+        checkGameOver()
+        }
       }
     }
   }
 
-  // useEffect(() => {
-  //   document.addEventListener("click", (event) => {
-  //     clickHandler(event);
-  //   });
-
-  //   return () =>
-  //     document.removeEventListener("click", (event) => {
-  //       clickHandler(event);
-  //     });
-  // }, []);
+ 
 
   function shuffle() {
     let array = [...gifArray];
@@ -91,10 +115,10 @@ function Cards({ difficulty }) {
       i;
 
     while (m) {
-      // Pick a remaining element…
+      
       i = Math.floor(Math.random() * m--);
 
-      // And swap it with the current element.
+      
       t = array[m];
       array[m] = array[i];
       array[i] = t;
@@ -105,17 +129,29 @@ function Cards({ difficulty }) {
 
   function imgHTML() {
     return (
-      <div className="cardContainer" style={{ width: getwidth() }}>
-        {/* <img className='card' src={gifArray[0].images.original.url} alt="" /> */}
-        {shuffle().map((card) => (
-          <img
-            onClick={clickHandler}
-            className={"card " + card.data.id}
-            key={card.data.id}
-            src={card.data.images.original.url}
-            data-id={card.data.id}
-          ></img>
-        ))}
+      <div className="gameSpace">
+        <div className="statContainer">
+          <div className="highScoreContainer">
+            <h6 className="statTitle">Highscore: </h6>
+            <p className="statText">{highScore}</p>
+          </div>
+          <div className="currentScoreContainer">
+            <h6 className="statTitle">Current Score: </h6>
+            <p className="statText">{currentScore() + " out of " + possibleScore}</p>
+          </div>
+        </div>
+        <div className="cardContainer" style={{ width: getwidth() }}>
+         
+          {shuffle().map((card) => (
+            <img
+              onClick={clickHandler}
+              className={"card " + card.data.id}
+              key={card.data.id}
+              src={card.data.images.original.url}
+              data-id={card.data.id}
+            ></img>
+          ))}
+        </div>
       </div>
     );
   }
